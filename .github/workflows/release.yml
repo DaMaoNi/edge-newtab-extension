@@ -1,0 +1,48 @@
+name: Release on Tag
+
+on:
+  push:
+    tags:
+      - 'v*' # 当推送类似 v1.0, v2.3.4 的 tag 时触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 赋予工作流写入仓库内容的权限（用于创建 Release）
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set variables
+        id: vars
+        run: |
+          # 获取 Tag 名称 (例如 v1.0.0)
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          
+          # 定义“代名词名”。默认使用仓库名。
+          # 如果想自定义名字，请将下一行改为：PROJECT_NAME="你的自定义名字"
+          PROJECT_NAME="${{ github.event.repository.name }}"
+          
+          # 组合最终的 Zip 文件名 (例如 MyProject-v1.0.0.zip)
+          ZIP_NAME="${PROJECT_NAME}-${TAG_NAME}.zip"
+          
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "zip_name=$ZIP_NAME" >> $GITHUB_OUTPUT
+          echo "Generated Zip Name: $ZIP_NAME"
+
+      - name: Zip all files
+        run: |
+          # 压缩当前目录所有文件，排除 .git 目录
+          zip -r ${{ steps.vars.outputs.zip_name }} . -x ".git/*"
+
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.vars.outputs.tag_name }}
+          name: Release ${{ steps.vars.outputs.tag_name }}
+          # 指定要上传的文件
+          files: ${{ steps.vars.outputs.zip_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
