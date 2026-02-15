@@ -1,0 +1,273 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* 背景图片容器 */
+.background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+}
+
+.background-image.loading {
+  opacity: 0;
+}
+
+/* 加载动画 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  z-index: 1000;
+  transition: opacity 0.3s ease-out;
+}
+
+.loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-overlay p {
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+/* 主内容区域 */
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* 时钟样式 */
+.clock {
+  font-size: 120px;
+  font-weight: 200;
+  color: white;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  letter-spacing: 5px;
+  margin-bottom: 10px;
+}
+
+.date {
+  font-size: 24px;
+  color: white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 50px;
+  letter-spacing: 3px;
+}
+
+/* 搜索框样式 */
+.search-container {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 50px;
+}
+
+#search-form {
+  display: flex;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#search-form:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+}
+
+#search-form:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+}
+
+#search-input {
+  flex: 1;
+  padding: 18px 30px;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #333;
+}
+
+#search-input::placeholder {
+  color: #999;
+}
+
+.search-btn {
+  padding: 18px 25px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.search-btn:hover {
+  opacity: 0.9;
+}
+
+.search-btn svg {
+  color: white;
+}
+
+/* 快捷链接样式 */
+.shortcuts {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.shortcut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.shortcut:hover {
+  transform: translateY(-5px);
+}
+
+.shortcut-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.shortcut:hover .shortcut-icon {
+  background: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* 刷新按钮 */
+.refresh-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.refresh-btn:hover {
+  background: white;
+  transform: rotate(180deg) scale(1.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.refresh-btn svg {
+  color: #667eea;
+}
+
+.refresh-btn.loading svg {
+  animation: spin 1s linear infinite;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .clock {
+    font-size: 60px;
+  }
+  
+  .date {
+    font-size: 16px;
+  }
+  
+  #search-input {
+    padding: 15px 20px;
+    font-size: 16px;
+  }
+  
+  .search-btn {
+    padding: 15px 20px;
+  }
+  
+  .shortcut-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 12px;
+  }
+  
+  .refresh-btn {
+    width: 45px;
+    height: 45px;
+    bottom: 20px;
+    right: 20px;
+  }
+}
