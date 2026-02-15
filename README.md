@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Moment Logo](icons/icon128.png)
+![Moment Logo](logo.png)
 
 **每次打开新标签页，遇见不一样的风景**
 
